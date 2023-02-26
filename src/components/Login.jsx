@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { Modal, ModalBody, Container, Form, Button } from 'react-bootstrap'
-import Logo from '../img/logo.svg'
+import Logo from '../img/logo.png'
 import Validation from "./Validation";
 
 const TelaLogin = () => {
@@ -47,7 +47,7 @@ const TelaLogin = () => {
                 <Form className="col-sm-8 col-md-4 ">
                     <Form.Group className="mb-3" style={{ textAlign: "center" }}>
                         <img src={Logo} alt="logo" style={{ width: "100px" }} />
-                        <h4 className="mt-2">You System</h4>
+                        <h4 className="mt-2">Login System</h4>
                     </Form.Group>
                     <Form.Group className="mb-2">
                         <Form.Label>Usuário:</Form.Label>
@@ -61,6 +61,11 @@ const TelaLogin = () => {
                         <Form.Check type="checkbox" label="Lembre-me" id='lembrar' checked={credential.saveChecked} onChange={saveConfiguration} />
                     </Form.Group>
                     <Button variant="success" disabled={!(credential.user !== '' && credential.password !== '' && credential.password.length > 7)} className="col-12" onClick={validaDados}>Acessar</Button>
+                    <div className="mt-3 d-flex justify-content-center">
+                        <small>
+                            <a  href="/Createuser">+ Criar novo usuário</a>
+                        </small>
+                    </div>
                 </Form>
             </Container>
         </>

@@ -6,4 +6,4 @@
 Este projeto resume-se a uma tela de login
   CSS -> bootstrap-react
   
-*Foi adicionada a opção de lembrete de credenciais mediante arquivamento da informações no local storage do navegado. 
+*Foi adicionada a opção de lembrete de credenciais mediante arquivamento da informações no local storage do navegador. 

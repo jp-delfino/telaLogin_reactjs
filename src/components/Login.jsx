@@ -5,36 +5,31 @@ import Validation from "./Validation";
 
 const TelaLogin = () =>{
 
-    const [conf,setConf] = useState({saveData:false,user:'',password:''})
     const [modal,setModal] = useState({status:false,message:'',variant:'',icon:''})
-    const [credencial,setCredencial] = useState({user:'',password:''})
+    const [credential,setcredential] = useState({user:'',password:'',saveChecked:false})
    
     const saveConfiguration = (a)=>{
+        setcredential({...credential,saveChecked:a.target.checked})
+
         if(a.target.checked){
-            let credencialSave = {saveData:true,user:credencial.user,password:btoa(credencial.password)}
-            setConf(credencialSave) 
-            localStorage.setItem('credencialSave',JSON.stringify(credencialSave))
+            let credentialSave = {saveData:true,user:credential.user,password:credential.password}
+            localStorage.setItem('credentialSave',JSON.stringify(credentialSave))
         }else{
-            localStorage.setItem('credencialSave','')
+            localStorage.setItem('credentialSave','')
         }  
     }
 
     const validaDados = ()=>{
-        let dadosValidacao = {user:credencial.user, password:credencial.password};
+        let dadosValidacao = {user:credential.user, password:credential.password};
         let result = Validation(dadosValidacao)
         setModal(prevState=>{return{...prevState,message:result.message,status:true,variant:result.variant,icon:result.icon}}) 
     }
 
     useEffect(()=>{
-        if(localStorage.getItem('credencialSave')){
-            let dataSaved = JSON.parse(localStorage.getItem('credencialSave'))
+        if(localStorage.getItem('credentialSave')){
+            let dataSaved = JSON.parse(localStorage.getItem('credentialSave'))
                 if(dataSaved.saveData){
-                    setCredencial(prevState=>{return{...prevState,user:dataSaved.user}})
-                    setCredencial(prevState=>{return{...prevState,password:atob(dataSaved.password)}})
-
-                    document.querySelector('#user').value=dataSaved.user
-                    document.querySelector('#password').value=atob(dataSaved.password)
-                    document.querySelector('#lembrar').checked = dataSaved.saveData    
+                   setcredential({user:dataSaved.user, password:dataSaved.password,saveChecked: dataSaved.saveData})
                 }
         }
     },[])
@@ -43,7 +38,7 @@ const TelaLogin = () =>{
         <>
              
             <Container className="d-flex justify-content-center mt-5" >    
-                <Modal show={modal.status}  onHide={() => setModal(prevState=>{return{...prevState,status:false}})}>
+                <Modal show={modal.status}  onHide={() => setModal({...modal,status:false})}>
                     <ModalBody className={modal.variant} style={{color:"#fff",borderColor:'transparent',textAlign:'center'}}>
                         <p className='mb-2' style={{fontSize:'50px'}}><i className={modal.icon}></i></p>
                         <p style={{fontSize:'18px'}}>{modal.message}</p>
@@ -56,16 +51,16 @@ const TelaLogin = () =>{
                     </Form.Group>    
                     <Form.Group className="mb-2">
                         <Form.Label>Usuário:</Form.Label>
-                        <Form.Control type="text" name="user" id="user" onChange={(a)=>setCredencial(prevState=>{return {...prevState,user:a.target.value}})}/>
+                        <Form.Control type="text" name="user" id="user" value={credential.user} onChange={(a)=>setcredential({...credential,user:a.target.value})}/>
                     </Form.Group>
                     <Form.Group className="mb-2">
                         <Form.Label>Senha:</Form.Label>
-                        <Form.Control type="password" name="password" id="password" onChange={(a)=>setCredencial(prevState=>{return {...prevState,password:a.target.value}})}/>
+                        <Form.Control type="password" name="password" id="password" value={credential.password} onChange={(a)=>setcredential({...credential,password:a.target.value})}/>
                     </Form.Group>
                     <Form.Group className="mb-2">
-                        <Form.Check type="checkbox" label="Lembre-me" id='lembrar' onChange={saveConfiguration} />
+                        <Form.Check type="checkbox" label="Lembre-me" id='lembrar' checked={credential.saveChecked} onChange={saveConfiguration} />
                     </Form.Group>
-                    <Button variant="success" disabled={!(credencial.user!=='' && credencial.password !=='' && credencial.password.length>7)} className="col-12" onClick={validaDados}>Acessar</Button>
+                    <Button variant="success" disabled={!(credential.user!=='' && credential.password !=='' && credential.password.length>7)} className="col-12" onClick={validaDados}>Acessar</Button>
                 </Form>
             </Container>
         </>
